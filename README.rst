@@ -4,16 +4,16 @@ README
 Sobre
 ----------
 
-Esse projeto foi feito exclusivamente para ser usado pela Danúbio no controle de pedidos.
-É possível registrar os pedidos e seus respectivos clientes.
-Tambêm é possível gerar um relatório dos pedidos de cada dia, ou de um determinado período. 
+Esse projeto foi feito exclusivamente para ser usado pela Danubio no controle de pedidos.
+E possivel registrar os pedidos e seus respectivos clientes.
+Tambem e possivel gerar um relatorio dos pedidos de cada dia, ou de um determinado periodo. 
 
 Dependencias
 ------------
 django 1.2.x
 django-admin-tools - https://bitbucket.org/izi/django-admin-tools/wiki/Home
 
-Instalação
+Instalacao
 ----------
 
 Instalando o django::
@@ -31,7 +31,7 @@ ou::
 
    sudo easy_install django-admin-tools
 
-Baixe o código do repositório::
+Baixe o codigo do repositorio::
 
    git clone https://github.com/lyralemos/danubio.git danubio
    cd danubio
