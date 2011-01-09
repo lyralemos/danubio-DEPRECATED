@@ -1,0 +1,7 @@
+.project
+.pydevproject
+.settings
+*.db
+.DS_Store
+*.pyc
+media/admin_tools
