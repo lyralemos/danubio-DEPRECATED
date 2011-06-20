@@ -1,0 +1,1 @@
+/Users/alexandre/enviroment/django1.3/lib/python2.6/site-packages/ajax_select/js/ajax_select.js

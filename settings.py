@@ -2,6 +2,7 @@
 import os
 PROJECT_DIR = os.path.dirname(__file__)
 
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -14,7 +15,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'source.db',                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(PROJECT_DIR,'source.db'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -49,15 +50,39 @@ USE_L10N = True
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(PROJECT_DIR,'media/')
 
+
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/site_media/'
+MEDIA_URL = '/media/'
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = os.path.join(PROJECT_DIR,'static')
+
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = '/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_DIR,'static_files'),
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'm@ie#x5cp)33%+2z#ti6$wx7(=o!%l3riuy6)gvty2i$mk7u#y'
@@ -74,6 +99,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
+    "django.core.context_processors.static",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
 )
@@ -81,6 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -101,12 +128,43 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
     'pedidos',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'ajax_select',
 )
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
+FORMAT_MODULE_PATH = 'danubio.formats'
 
 ADMIN_TOOLS_MENU = 'danubio.menu.CustomMenu'
 ADMIN_TOOLS_INDEX_DASHBOARD = 'danubio.dashboard.CustomIndexDashboard'
 ADMIN_TOOLS_THEMING_CSS = 'css/theming.css'
+
+AJAX_LOOKUP_CHANNELS = {
+    #'cliente' : dict(model='pedidos.Cliente',search_field='nome'),
+    'cliente' : ('pedidos.lookups', 'ClienteLookup'),
+    'produto' : dict(model='pedidos.Produto',search_field='nome'),
+}
