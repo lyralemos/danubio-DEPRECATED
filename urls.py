@@ -5,6 +5,8 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
+from ajax_select import urls as ajax_select_urls
+
 urlpatterns = patterns('',
     # Example:
     # (r'^danubio/', include('danubio.foo.urls')),
@@ -14,7 +16,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin_tools/', include('admin_tools.urls')),
-    (r'^ajax_select/', include('ajax_select.urls')),
+    #(r'^ajax_select/', include('ajax_select.urls')),
+    (r'^lookups/', include(ajax_select_urls)),
+    (r'^grappelli/', include('grappelli.urls')),
     (r'', include(admin.site.urls)),
 )
 

@@ -26,11 +26,19 @@ class Produto(models.Model):
     class Meta():
         ordering = ('nome',)
 
+STATUS_CHOICE = (
+    (1,'Aberto'),
+    (2,'Entregue'),
+)
+
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente)
     itens = models.ManyToManyField(Produto,through='PedidoProduto')
     data_pedido = models.DateTimeField(auto_now_add=True)
-    data_entrega = models.DateField()
+    data_entrega = models.DateTimeField()
+    observacao = models.TextField(u'Observação',blank=True,null=True)
+    status = models.CharField(max_length=10,choices=STATUS_CHOICE,editable=False)
+    pago = models.BooleanField(editable=False)
     
     def __unicode__(self):
         return u'Pedido %s' % self.id

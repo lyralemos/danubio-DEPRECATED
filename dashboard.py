@@ -10,6 +10,7 @@ To activate your index dashboard add the following to your settings.py::
 And to activate the app index dashboard::
     ADMIN_TOOLS_APP_INDEX_DASHBOARD = 'danubio.dashboard.CustomAppIndexDashboard'
 """
+from datetime import date
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -17,6 +18,25 @@ from django.core.urlresolvers import reverse
 from admin_tools.dashboard import modules, Dashboard, AppIndexDashboard
 from admin_tools.utils import get_admin_site_name
 
+from pedidos.models import Pedido
+
+
+class EncomendasModule(modules.DashboardModule):
+    title = 'Encomendas'
+    template = 'pedidos/encomendas.html'
+
+    def init_with_context(self, context):
+        self.total = Pedido.objects.filter(data_entrega__startswith=date.today()).count()
+        
+    def is_empty(self):
+        return False
+
+class RelatorioModule(modules.DashboardModule):
+    title = u'Relatórios'
+    template = 'pedidos/relatorios.html'
+
+    def is_empty(self):
+        return False
 
 class CustomIndexDashboard(Dashboard):
     """
@@ -33,6 +53,9 @@ class CustomIndexDashboard(Dashboard):
             u'Administração', ['django.contrib.auth.*',]
         ))
         
+        self.children.append(EncomendasModule())
+        self.children.append(RelatorioModule())
+        '''
         self.children.append(modules.LinkList(
             u'Relatórios',
             draggable=True,
@@ -43,6 +66,7 @@ class CustomIndexDashboard(Dashboard):
                 [u'Encomendas por período',reverse('%s:password_change' % site_name)],
             ]
         ))
+        '''
 
         # append a recent actions module
         self.children.append(modules.RecentActions(_('Recent Actions'), 5))

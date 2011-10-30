@@ -11,7 +11,7 @@
     margin: 0;
     padding: 5px 10px;
     text-indent: -9999px;
-    background: transparent url(../admin_tools/images/django.png) 10px 5px no-repeat;
+    background: transparent url(../images/django.png) 10px 5px no-repeat;
     height: 31px;
     width: 93px;
 }
@@ -26,4 +26,19 @@ div.breadcrumbs {
 
 div.breadcrumbs a {
     display: inline;
+}
+
+ul.relatorio{width:240px;margin:0 auto}
+
+ul.relatorio li{
+    float:left;
+    width:64px;
+    height:75px;
+}
+
+ul.relatorio a{
+    display:block;
+    background:url(../images/document.png) no-repeat;
+    padding-top:58px;
+    text-align:center;
 }

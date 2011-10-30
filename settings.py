@@ -2,7 +2,6 @@
 import os
 PROJECT_DIR = os.path.dirname(__file__)
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -50,7 +49,6 @@ USE_L10N = True
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = os.path.join(PROJECT_DIR,'media/')
 
-
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
@@ -73,7 +71,9 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_DIR,'static_files'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
 )
 
 # List of finder classes that know how to find static files in
@@ -116,7 +116,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'danubio.urls'
 
 TEMPLATE_DIRS = (
-    #os.path.join(PROJECT_DIR,'templates')
+    os.path.join(PROJECT_DIR,'templates')
 )
 
 INSTALLED_APPS = (
@@ -168,3 +168,5 @@ AJAX_LOOKUP_CHANNELS = {
     'cliente' : ('pedidos.lookups', 'ClienteLookup'),
     'produto' : dict(model='pedidos.Produto',search_field='nome'),
 }
+AJAX_SELECT_BOOTSTRAP = True
+AJAX_SELECT_INLINES = 'inline'
