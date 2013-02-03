@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<div id="login">
+	<form method="post">{% csrf_token %}
+		<div class="control-group">
+			<input type="text" placeholder="{{ form.username.label }}" 
+				name="{{ form.username.html_name }}" id="id_{{ form.username.html_name }}" />
+		</div>
+		<div class="control-group">
+			<input type="password" placeholder="{{ form.password.label }}"
+				name="{{ form.password.html_name }}" id="id_{{ form.password.html_name }}"  />
+		</div>
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">Login</button>
+		</div>
+	</form>
+	</div>
+
+{% endblock %}
