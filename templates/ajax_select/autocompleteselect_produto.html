@@ -1,0 +1,6 @@
+{% block extra_script %}
+    $('#{{ html_id }}').bind('added',function() {
+            entered = $('#{{ html_id }}').val();
+            alert( entered );
+    });
+{% endblock %}

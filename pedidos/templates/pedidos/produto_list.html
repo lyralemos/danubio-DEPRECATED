@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load pagination_tags %}
+
+{% block main %}
+
+	<a href="#" id="add" class="btn btn-primary pull-right" data-titulo="Adicionar Produto">Adicionar Produto</a>
+	<form class="form-search pull-left">
+		<input type="text" placeholder="termo de busca..." class="input-medium search-query" name="search" />
+		<button type="submit" class="btn">
+			<i class="icon-search"></i> Busca
+		</button>
+	</form>
+
+	<div class="row-fluid">
+		<table id="object_list" class="table table-bordered table-striped">
+			<tr>
+				<th>Nome</th>
+				<th>Preço</th>
+			</tr>
+			{% autopaginate object_list 20 %}
+			{% for object in object_list %}
+			<tr>
+				<td><a href="#" data-id='{{ object.id }}' data-titulo="Editar Produto">{{ object }}</a></td>
+				<td>{{ object.preco }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% paginate %}
+		<p class="pull-right"><b>Total:</b> <span class="badge">{{ object_list|length }}</span> produtos</p>
+	</div>
+
+	
+{% endblock %}

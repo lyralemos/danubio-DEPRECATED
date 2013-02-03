@@ -1,0 +1,40 @@
+<form method="post" id="frm" class="form-horizontal" style="margin:0"> {% csrf_token %}
+<div class="modal-header">
+	<button class="close" data-dismiss="modal">×</button>
+	<h3>Adicionar Cliente</h3>
+</div>
+<div class="modal-body">
+		{% for field in form %}
+			{% include 'pedidos/field.html' %}
+		{% endfor %}
+		{% if inlines %}
+			<div class="tabbable">
+				{% for formset in inlines %}
+				{{ formset.management_form }}
+				<ul class="nav nav-tabs">
+					{% for inline_form in formset %}
+					<li {% if forloop.counter == 1 %}class="active"{% endif %}><a href="#item{{ forloop.counter }}" data-toggle="tab">Endereço {{ forloop.counter }}</a></li>
+					{% endfor %}
+				</ul>
+				<div class="tab-content">
+					{% for inline_form in formset %}
+						<div class="tab-pane {% if forloop.counter == 1 %}active{% endif %}" id="item{{ forloop.counter }}">
+							{% for field in inline_form %}
+								{% include 'pedidos/field.html' %}
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+</div>
+
+<div class="modal-footer">
+	<a id="delete" class="btn btn-danger pull-left" href="#">
+		<i class="icon-trash icon-white"></i>
+		Excluir
+	</a>
+	<input type="submit" class="btn btn-primary" value="Salvar" />
+</div>
+</form>

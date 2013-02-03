@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block main %}
+	<div class="container">
+		<h2>
+			{% if object %}
+				{{ object }}
+			{% else %}
+				Novo Pedido
+			{% endif %}
+		</h2>
+		<form method="post" action="" class="form-horizontal">{% csrf_token %}
+			
+			<div class="pull-right">
+				<div id="total" class="well">
+					<h3>Total: R$ <span>{{ object.total }}</span></h3>
+				</div>
+				{% if object.status == '1' %}
+					<div class="alert">
+						<span class="label label-warning">Status:</span>
+						Pedido em aberto
+					</div>
+				{% elif object.status == '2' %}
+					<div class="alert alert-success">
+						<span class="label label-success">Status:</span>
+						Pedido Entreque
+					</div>
+				{% elif object.status == '3' %}
+					<div class="alert alert-error">
+						<span class="label label-important">Status:</span>
+						Pedido Cancelado
+					</div>
+				{% endif %}
+				{% if object %}
+				<a href="{% url imprimir_pedido_view pk=object.id %}" class="btn btn-info btn-block">
+					<i class="icon-print icon-white"></i>
+					Imprimir Comprovante
+				</a>
+				{% endif %}
+			</div>
+
+			<div class="pull-left">
+				{% for field in form %}
+					{% include 'pedidos/field.html' %}
+				{% endfor %}
+			</div>
+
+			<table id="itens-pedido" class="table table-bordered">
+				<tr>
+					<th width="600">Produto</th>
+					<th>Valor Unitário</th>
+					<th>Quantidade</th>
+					<th>Sub-Total</th>
+					<th>Apagar</th>
+				</tr>
+			{% for formset in inlines %}
+				{{ formset.management_form }}
+				{% for inline_form in formset %}
+					{% for hidden in inline_form.hidden_fields %}
+				    	{{ hidden }}
+				    {% endfor %}
+					<tr>
+						<td class="produto">
+							{{ inline_form.produto }}
+							{% if inline_form.produto.errors %}
+								<span class="help-inline">{{ inline_form.produto.errors }}</span>
+							{% endif %}
+						</td>
+						<td class="valor_unitario">
+							<input type="text" disabled="disabled" 
+								id="id_pedidoproduto_set-{{ forloop.counter0 }}-valor_unitario" 
+								name="pedidoproduto_set-{{ forloop.counter0 }}-valor_unitario" value="0" />
+						</td>
+						<td class="quantidade">
+							<div class="input-append">
+								{{ inline_form.quantidade }}
+								<button class="btn" type="button">+</button>
+								<button class="btn" type="button">-</button>
+								{% if inline_form.quantidade.errors %}
+									<span class="help-inline">{{ inline_form.quantidade.errors }}</span>
+								{% endif %}
+							</div>
+							
+						</td>
+						<td class="sub_total">
+							<input type="text" disabled="disabled" 
+								id="id_pedidoproduto_set-{{ forloop.counter0 }}-sub_total" 
+								name="pedidoproduto_set-{{ forloop.counter0 }}-sub_total"
+								value="0" />
+						</td>
+						<td class="delete">{{ inline_form.DELETE }}</td>
+					</tr>
+				{% endfor %}
+				</div>
+			{% endfor %}
+			</table>
+			
+			<div class="form-actions">
+			  <button type="submit" class="btn btn-primary">Salvar</button>
+			  <button type="button" class="btn">Cancelar</button>
+			</div>
+		</form>
+	</div>
+	
+{% endblock %}

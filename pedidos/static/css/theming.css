@@ -42,3 +42,8 @@ ul.relatorio a{
     padding-top:58px;
     text-align:center;
 }
+
+.ui-autocomplete{
+    max-width:300px !important;
+    width:300px !important;
+}

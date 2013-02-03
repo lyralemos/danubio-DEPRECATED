@@ -21,4 +21,4 @@ class ClienteLookup(LookupChannel):
 
     def format_item_display(self,obj):
         """ (HTML) formatted item for displaying item in the selected deck area """
-        return u"<b>%s</b> <br />%s - %s<br /> %s" % (obj.nome, obj.endereco,obj.bairro,obj.telefone)
+        return u"<b>%s</b> <br />%s" % (obj.nome,obj.telefone1)

@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+	<title>{{ object }}</title>
+	<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
+	<style>
+		#main td{width:50%;}
+		#main td:first-child,
+		#main th:first-child{
+			text-align: right; 
+		}
+
+		#sub{
+			width:60%;
+			margin: 0 auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		{% for r in repeat %}
+		<div class="well pull-right" style="margin-bottom:-60px"><b>Código:</b>{{ pedido.id }}</div>
+		<table id="main" class="table table-bordered table-condensed">
+			<tr>
+				<td colspan="2" style="text-align: center;">
+					<h4>Danúbio Doces e Salgados</h4>
+					<h5>Marinho Lemos CIA. LTDA</h5>
+					<small>
+						Rua do Livramento, 171 - Centro - Maceió/AL<br />
+						Telefones: 3221-9925 / 3223-8089
+					</small>
+				</td>
+			</tr>
+			<tr>
+				<td>Nome</td>
+				<td>
+					{{ object.cliente }}
+					({{ object.cliente.telefone1 }}
+					{% if object.cliente.telefone2 %}
+					- {{ object.cliente.telefone2 }}
+					{% endif %})
+				</td>
+			</tr>
+			<tr>
+				<td>Endereço</td>
+				<td>{{ object.endereco }}</td>
+			</tr>
+			{% if object.endereco.complemento %}
+			<tr>
+				<td>Complemento</td>
+				<td>{{ object.endereco.complemento }}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td>Data do Pedido</td>
+				<td>{{ object.data_pedido }}</td>
+			</tr>
+			<tr>
+				<td>Entrega</td>
+				<td>{{ object.data_entrega }} - {{ object.get_hora_entrega_display }}</td>
+			</tr>
+			<tr>
+				<td>É entrega?</td>
+				<td>
+					{% if object.entrega %}
+					Sim
+					{% else %}
+					Não
+					{% endif %}
+				</td>
+			</tr>
+			{% if object.observacao %}
+			<tr>
+				<td>Observação</td>
+				<td>{{ object.observacao }}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td colspan="4">
+					<table id="sub" class="table table-bordered table-striped table-condensed">
+						<tr>
+							<th>Produto</th>
+							<th>Quantidade</th>
+						</tr>
+						{% for item in itens_pedido %}
+						<tr>
+							<td>{{ item.produto }}</td>
+							<td>{{ item.quantidade }}</td>
+						</tr>
+						{% endfor%}
+						<tr>
+							<td>Total</td>
+							<td>{{ object.total }}</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		{% endfor %}
+	</div>
+</body>
+</html>

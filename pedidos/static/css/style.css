@@ -1,0 +1,53 @@
+#id_cliente_wrapper .results_on_deck{
+	left:0 !important;
+
+}
+#id_cliente_wrapper .results_on_deck >div{margin: 0 !important}
+#id_cliente_wrapper .help{display: none}
+
+#itens-pedido .valor_unitario,
+#itens-pedido .quantidade,
+#itens-pedido .sub_total,
+#itens-pedido .delete,
+#itens-pedido th{
+	text-align: center;
+}
+
+#itens-pedido .valor_unitario input,
+#itens-pedido .quantidade input,
+#itens-pedido .sub_total input{
+	text-align: center;
+}
+
+#itens-pedido input{
+	width: 30px;
+}
+
+#itens-pedido .produto input{
+	width: 250px;
+}
+
+#itens-pedido .produto .help{display: none}
+
+#itens-pedido td{
+	position: relative;
+}
+#itens-pedido .results_on_deck{
+	/*top:0 !important;*/
+	float: right;
+	top:0px !important;
+	left: 0px !important;
+}
+
+#field-endereco{display: none}
+
+ul.ui-autocomplete{
+	width:320px !important;
+	max-width:320px !important;
+}
+
+#login{
+	width:200px;
+	margin:100px auto;
+}
+#login form{width:220px;}

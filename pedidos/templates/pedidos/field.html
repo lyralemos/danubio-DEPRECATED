@@ -1,0 +1,16 @@
+{% if field.is_hidden %}
+	{{ field }}
+{% else %}
+<div id="field-{{ field.name }}" class="control-group {% if field.errors %}error{% endif %}">
+	<label class="control-label" for="id_{{ field.html_name }}">{{ field.label }}</label>
+	<div class="controls">
+		{{ field }}
+		{% if field.help_text %}
+			<p class="help-block">{{ field.help_text }}</p>
+		{% endif %}
+		{% if field.errors %}
+			<span class="help-inline">{{ field.errors }}</span>
+		{% endif %}
+	</div>
+</div>
+{% endif %}

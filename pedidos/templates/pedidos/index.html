@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="row">
+	<div class="span4">
+		<h2>Clientes</h2>
+		<table class="table table-striped table-bordered">
+		{% for cliente in cliente_list %}
+			<tr>
+				<td>{{ cliente }}</td>
+				<td>Editar</td>
+			</tr>
+		{% endfor %}
+		</table>
+		<button class="btn btn-primary">Novo Cliente</button>
+	</div>
+	<div class="span4">
+		<h2>Produtos</h2>
+		<table class="table table-striped table-bordered">
+		{% for produto in produto_list %}
+			<tr>
+				<td>{{ produto }}</td>
+				<td>Editar</td>
+			</tr>
+		{% endfor %}
+		</table>
+		<button class="btn btn-primary">Novo Produto</button>
+	</div>
+	<div class="span4">
+		<h2>Pedidos</h2>
+		<table class="table table-striped table-bordered">
+		{% for pedido in pedido_list %}
+			<tr>
+				<td>{{ pedido }}</td>
+				<td>Editar</td>
+			</tr>
+		{% endfor %}
+		</table>
+		<button class="btn btn-primary">Novo Pedido</button>
+	</div>
+</div>
+{% endblock %}

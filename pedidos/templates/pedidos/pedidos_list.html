@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% load pagination_tags %}
+
+{% block main %}
+	<div class="clearfix">
+		<a href="add" class="btn btn-primary pull-right" data-titulo="Novo Pedido">Novo Pedido</a>
+		<form class="form-search pull-left">
+			<input type="text" placeholder="termo de busca..." class="input-medium search-query" name="termo" />
+			<button type="submit" class="btn">
+				<i class="icon-search"></i> Busca
+			</button>
+			<a data-href="status=1" class="btn btn-warning">
+				<i class="icon-tag icon-white"></i>
+				Abertos
+			</a>
+			<a data-href="status=2" class="btn btn-success">
+				<i class="icon-ok-sign icon-white"></i>
+				Fechados
+			</a>
+			<a data-href="status=3" class="btn btn-danger">
+				<i class="icon-remove icon-white"></i>
+				Cancelados
+			</a>
+		</form>
+	</div>
+
+	<div class="row-fluid">
+		{% if object_list %}
+		{% autopaginate object_list 20 %}
+		<table id="object_list" class="table table-bordered table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Cliente</th>
+				<th>
+					<a data-href="order=data_pedido">Data do Pedido</a>
+				</th>
+				<th>
+					<a data-href="order=data_entrega">Data de Entrega</a>
+				</th>
+				<th>Total</th>
+				<th>Comprovante</th>
+				<th>Status</th>
+			</tr>
+			{% for object in object_list %}
+			<tr>
+				<td>{{ object.id }}</td>
+				<td><a href="{% url update_pedidos_view object.id %}">{{ object.cliente }}</a></td>
+				<td>{{ object.data_pedido }}</td>
+				<td>{{ object.data_entrega }}</td>
+				<td>{{ object.total }}</td>
+				<td style="text-align:center">
+					<a href="{% url imprimir_pedido_view pk=object.id %}" class="btn btn-info">
+						<i class="icon-print icon-white"></i>
+						Imprimir
+					</a>
+				</td>
+				<td>
+					<div class="btn-group">
+						{% if object.status == '1' %}
+						<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+							{{ object.get_status_display }}
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="modificar_status/{{ object.id }}/?acao=2">Entregue</a></li>
+							<li><a href="modificar_status/{{ object.id }}/?acao=3">Cancelar</a></li>
+						</ul>
+						{% endif %}
+					</div>
+					{% if object.status == '2' %}
+						<span class="label label-success">
+							<i class="icon-ok-sign icon-white"></i>
+							{{ object.get_status_display }}
+						</span>
+					{% elif object.status == '3' %}
+						<span class="label label-important">
+							<i class="icon-remove icon-white"></i>
+							{{ object.get_status_display }}
+						</span>
+					{% endif %}
+					
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% else %}
+		<div class="well span12">Não foram encontrados nenhum pedido</div>
+		{% endif %}
+		{% paginate %}
+		<p class="pull-right"><b>Total:</b> <span class="badge">{{ object_list|length }}</span> pedidos</p>
+
+	</div>
+
+	
+{% endblock %}
