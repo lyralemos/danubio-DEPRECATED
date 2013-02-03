@@ -28,14 +28,17 @@ class PedidoAdminForm(forms.ModelForm):
 class PedidoAdmin(AjaxSelectAdmin):
     #form = make_ajax_form(Pedido,dict(cliente='cliente'))
     form = PedidoAdminForm
-    list_display = ('cliente','data_pedido','data_entrega')
-    list_filter = ('data_pedido','data_entrega')
+    list_display = ('id','cliente','total','pago','data_entrega','status')
+    list_filter = ('data_entrega','status')
     date_hierarchy = 'data_entrega'
+    search_fields = ('cliente__nome','id')
     inlines = (PedidoProdutoInline,)
 
+    class Media:
+        js = ('js/jquery.meio.mask.js','js/functions.js')
+
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('nome','bairro','telefone')
-    list_filter = ('bairro',)
+    list_display = ('nome','telefone1','telefone2')
 
 admin.site.register(Pedido,PedidoAdmin)
 admin.site.register(Produto)

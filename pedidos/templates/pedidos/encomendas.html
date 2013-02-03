@@ -2,15 +2,18 @@
     <div{% if index %} id="module_{{ index }}{% if subindex %}_{{ subindex }}{% endif %}"{% endif %} class="{{ module.render_css_classes }}">
         {% if module.show_title %}<h2>{{ module.title }}</h2>{% endif %}
         <div class="dashboard-module-content">
-            <h2>
-                <center>
-                    {% if module.total == 1 %}
-                    Existe <b>{{ module.total }}</b> encomenda para hoje.
-                    {% else %}
-                    Existem <b>{{ module.total }}</b> encomendas para hoje.
-                    {% endif %}
-                </center>
-            </h2>
+            {% if module.abertas %}
+            <ul>
+                {% for item in module.abertas %}
+                <li class="{% cycle 'odd' 'even' %}">
+                    <a href="{% url admin:pedidos_pedido_change item.id %}">{{ item.id }}</a>
+                    <span><a href="{% url admin:pedidos_pedido_change item.id %}">{{ item.cliente }}</a></span>
+                    <span class="float-right">{{ item.data_entrega|date:"H:i" }}</span>
+                    
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
     </div>
 {% endif %}

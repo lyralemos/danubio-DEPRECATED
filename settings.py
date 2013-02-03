@@ -111,6 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'danubio.urls'
@@ -120,10 +121,6 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -132,6 +129,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'pedidos',
     'ajax_select',
+    'pagination',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -159,9 +157,6 @@ LOGGING = {
 
 FORMAT_MODULE_PATH = 'danubio.formats'
 
-ADMIN_TOOLS_MENU = 'danubio.menu.CustomMenu'
-ADMIN_TOOLS_INDEX_DASHBOARD = 'danubio.dashboard.CustomIndexDashboard'
-ADMIN_TOOLS_THEMING_CSS = 'css/theming.css'
 
 AJAX_LOOKUP_CHANNELS = {
     #'cliente' : dict(model='pedidos.Cliente',search_field='nome'),
@@ -170,3 +165,6 @@ AJAX_LOOKUP_CHANNELS = {
 }
 AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'
+
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
