@@ -6,7 +6,7 @@
 	<div class="clearfix">
 		<a href="add" class="btn btn-primary pull-right" data-titulo="Novo Pedido">Novo Pedido</a>
 		<form class="form-search pull-left">
-			<input type="text" placeholder="termo de busca..." class="input-medium search-query" name="termo" />
+			<input type="text" placeholder="termo de busca..." class="input-medium search-query" name="termo" value="{{ request.GET.termo }}" />
 			<button type="submit" class="btn">
 				<i class="icon-search"></i> Busca
 			</button>
@@ -84,10 +84,10 @@
 			</tr>
 			{% endfor %}
 		</table>
+		{% paginate %}
 		{% else %}
 		<div class="well span12">Não foram encontrados nenhum pedido</div>
 		{% endif %}
-		{% paginate %}
 		<p class="pull-right"><b>Total:</b> <span class="badge">{{ object_list|length }}</span> pedidos</p>
 
 	</div>

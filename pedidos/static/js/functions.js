@@ -98,14 +98,20 @@ $(document).ready(function(){
 	//fix para links com paramertos get
 	$('a[data-href]').attr('href', function(index, href) {
         var param = $(this).data('href')
-        href = document.location.href
+        key = param.split('=')[0]
+        value = param.split('=')[1]
 
-        if (href.charAt(href.length - 1) === '?') //Very unlikely
-            return href + param;
-        else if (href.indexOf('?') > 0)
-            return href + '&' + param;
-        else
-            return href + '?' + param;
+        href = document.location.href
+        params = getParameters()
+        result = '?'
+
+        for (p in params)
+        	if (key != p)
+        		result += p + '=' + params[p] + '&'
+        result += key + '=' + value
+
+        return result
+
     });
 	
 })
@@ -169,4 +175,20 @@ make_ajax_form = function(action,id){
 		return false
 	})
 		
+}
+
+function getParameters() {
+	var searchString = window.location.search.substring(1)
+	var params = searchString.split("&")
+	var hash = {}
+
+	if (searchString == ""){
+		return null
+	}
+
+	for (var i = 0; i < params.length; i++) {
+		var val = params[i].split("=");
+		hash[unescape(val[0])] = unescape(val[1]);
+	}
+	return hash;
 }

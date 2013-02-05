@@ -54,5 +54,5 @@ urlpatterns = patterns('',
     url(r'^pedidos/get_price/(?P<pk>[\w-]+)/$','pedidos.views.get_price',name='get_price'),
     url(r'^pedidos/modificar_status/(?P<pk>[\w-]+)/$','pedidos.views.modificar_status',name='modificar_status'),
 
-    url(r'^$', IndexView.as_view(),name='index'),
+    url(r'^$', login_required(IndexView.as_view()),name='index'),
 )

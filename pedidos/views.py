@@ -2,6 +2,7 @@ from django.utils import simplejson
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.db.models import Q
 
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSet
 
@@ -37,7 +38,7 @@ class SearchPedidosView(ListView):
 		search = self.model.objects.all()
 
 		if termo:
-			search = search.filter(cliente__nome__contains=termo)
+			search = search.filter(Q(cliente__nome__contains=termo) | Q(pk__contains=termo))
 		if status:
 			search = search.filter(status=status)
 		if order:

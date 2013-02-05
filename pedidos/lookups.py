@@ -7,9 +7,13 @@ from pedidos.models import Cliente
 class ClienteLookup(LookupChannel):
 
     model = Cliente
+    plugin_options = {
+        'minLength' : 4
+    }
+    min_length = 4
 
     def get_query(self,q,request):
-        return Cliente.objects.filter(Q(nome__icontains=q)).order_by('nome')
+        return Cliente.objects.filter(Q(nome__icontains=q) | Q(telefone1__icontains=q)| Q(telefone2__icontains=q)).order_by('nome')
 
     def get_result(self,obj):
         u""" result is the simple text that is the completion of what the person typed """
