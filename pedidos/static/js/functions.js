@@ -146,11 +146,14 @@ get_enderecos = function(id,selected){
 }
 
 atualiza_total = function(){
-	var total = 0.0
+	var valor = 0.0
+	var desconto = parseFloat($('#desconto').html())
 	$('.sub_total input').each(function(){
-		total += parseFloat($(this).val())
+		valor += parseFloat($(this).val())
 	})
-	$('#total span').html(total.toFixed(2))
+	total = valor-desconto
+	$('#valor').html(String(valor.toFixed(2)).replace('.',','))
+	$('#total').html(String(total.toFixed(2)).replace('.',','))
 }
 
 make_ajax_form = function(action,id){

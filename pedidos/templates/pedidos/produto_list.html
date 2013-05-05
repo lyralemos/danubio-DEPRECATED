@@ -22,7 +22,7 @@
 			{% for object in object_list %}
 			<tr>
 				<td><a href="#" data-id='{{ object.id }}' data-titulo="Editar Produto">{{ object }}</a></td>
-				<td>{{ object.preco }}</td>
+				<td>R$ {{ object.preco }}</td>
 			</tr>
 			{% endfor %}
 		</table>

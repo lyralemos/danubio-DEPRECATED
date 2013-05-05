@@ -6,22 +6,25 @@
 	<div class="clearfix">
 		<a href="add" class="btn btn-primary pull-right" data-titulo="Novo Pedido">Novo Pedido</a>
 		<form class="form-search pull-left">
-			<input type="text" placeholder="termo de busca..." class="input-medium search-query" name="termo" value="{{ request.GET.termo }}" />
+			<input type="text" placeholder="termo de busca..." class="input-medium search-query" name="q" value="{{ request.GET.termo }}" />
 			<button type="submit" class="btn">
 				<i class="icon-search"></i> Busca
 			</button>
-			<a data-href="status=1" class="btn btn-warning">
-				<i class="icon-tag icon-white"></i>
-				Abertos
-			</a>
-			<a data-href="status=2" class="btn btn-success">
-				<i class="icon-ok-sign icon-white"></i>
-				Fechados
-			</a>
-			<a data-href="status=3" class="btn btn-danger">
-				<i class="icon-remove icon-white"></i>
-				Cancelados
-			</a>
+			<div class="btn-group">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					Filtrar
+				<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a data-href="status=1">Abertos</a></li>
+					<li><a data-href="status=4">Pago Parcialmente</a></li>
+					<li><a data-href="status=5">Pago</a></li>
+					<li><a data-href="status=2">Entregue</a></li>
+					<li><a data-href="status=3">Não veio buscar</a></li>
+					<li class="divider"></li>
+					<li><a href=".">Todos</a></li>
+				</ul>
+			</div>
 		</form>
 	</div>
 
@@ -33,53 +36,61 @@
 				<th>ID</th>
 				<th>Cliente</th>
 				<th>
-					<a data-href="order=data_pedido">Data do Pedido</a>
-				</th>
-				<th>
 					<a data-href="order=data_entrega">Data de Entrega</a>
 				</th>
 				<th>Total</th>
-				<th>Comprovante</th>
-				<th>Status</th>
+				<th>Valor Pago</th>
+				<th>A pagar</th>
+				<th>Situação</th>
+				<th width="180">Opções</th>
 			</tr>
 			{% for object in object_list %}
 			<tr>
 				<td>{{ object.id }}</td>
-				<td><a href="{% url update_pedidos_view object.id %}">{{ object.cliente }}</a></td>
-				<td>{{ object.data_pedido }}</td>
+				<td><a href="{% url 'update_pedidos_view' object.id %}">{{ object.cliente }}</a></td>
 				<td>{{ object.data_entrega }}</td>
-				<td>{{ object.total }}</td>
-				<td style="text-align:center">
-					<a href="{% url imprimir_pedido_view pk=object.id %}" class="btn btn-info">
-						<i class="icon-print icon-white"></i>
-						Imprimir
-					</a>
+				<td>R$ {{ object.total }}</td>
+				<td>R$ {{ object.valor_pago }}</td>
+				<td>R$ {{ object.a_pagar }}</td>
+				<td>
+					{% if object.status == '1' %}
+						<span class="label">{{ object.get_status_display }}</span>
+					{% elif object.status == '2' %}
+						<span class="label label-success">{{ object.get_status_display }}</span>
+					{% elif object.status == '3' %}
+						<span class="label label-important">{{ object.get_status_display }}</span>
+					{% elif object.status == '4' %}
+						<span class="label label-warning">{{ object.get_status_display }}</span>
+					{% else %}
+						<span class="label label-info">{{ object.get_status_display }}</span>
+					{% endif %}
 				</td>
 				<td>
 					<div class="btn-group">
-						{% if object.status == '1' %}
-						<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-							{{ object.get_status_display }}
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							Ações
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">
+							{% if object.status == '1' or object.status == '4' %}
+							<li><a href="">Desconto</a></li>
+							<li class="divider"></li>
+							{% endif %}
+							{% if object.status == '1' or object.status == '4' %}
+							<li><a href="modificar_status/{{ object.id }}/?acao=5">Pago</a></li>
+							{% endif %}
+							{% if object.status != '2' %}
 							<li><a href="modificar_status/{{ object.id }}/?acao=2">Entregue</a></li>
-							<li><a href="modificar_status/{{ object.id }}/?acao=3">Cancelar</a></li>
+							{% endif %}
+							<li><a href="modificar_status/{{ object.id }}/?acao=3">Não veio buscar</a></li>
+							<li class="divider"></li>
+							<li><a href="?q={{ object.cliente }}">Visualizar pedidos desse cliente</a></li>
 						</ul>
-						{% endif %}
 					</div>
-					{% if object.status == '2' %}
-						<span class="label label-success">
-							<i class="icon-ok-sign icon-white"></i>
-							{{ object.get_status_display }}
-						</span>
-					{% elif object.status == '3' %}
-						<span class="label label-important">
-							<i class="icon-remove icon-white"></i>
-							{{ object.get_status_display }}
-						</span>
-					{% endif %}
-					
+					<a href="{% url 'imprimir_pedido_view' pk=object.id %}" class="btn btn-info">
+						<i class="icon-print icon-white"></i>
+						Imprimir
+					</a>
 				</td>
 			</tr>
 			{% endfor %}

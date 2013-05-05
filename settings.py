@@ -156,6 +156,7 @@ LOGGING = {
 }
 
 FORMAT_MODULE_PATH = 'danubio.formats'
+DECIMAL_SEPARATOR = ','
 
 
 AJAX_LOOKUP_CHANNELS = {

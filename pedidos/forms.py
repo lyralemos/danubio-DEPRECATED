@@ -4,15 +4,16 @@ from django import forms
 
 from ajax_select import make_ajax_form,make_ajax_field
 
-from pedidos.models import Pedido, Produto, Cliente, PedidoProduto, Endereco, HORARIO_CHOICE
+from pedidos.models import Pedido, Produto, Cliente, PedidoProduto, Endereco
 
 class PedidoForm(forms.ModelForm):
     cliente = make_ajax_field(Pedido,'cliente','cliente',help_text=' ')
     endereco = forms.ModelChoiceField(queryset=Endereco.objects.all())
+    valor_pago = forms.DecimalField(max_digits=5,decimal_places=2,localize=True)
+
 
     def __init__(self, list=None, *args, **kwargs):
         super(PedidoForm, self).__init__(*args, **kwargs)
-        
 
     class Meta:
         model = Pedido
@@ -23,3 +24,9 @@ class PedidoProdutoForm(forms.ModelForm):
     
     class Meta:
         model = PedidoProduto
+
+class ProdutoForm(forms.ModelForm):
+    preco = forms.DecimalField(max_digits=5,decimal_places=2,localize=True)
+
+    class Meta:
+        model = Produto

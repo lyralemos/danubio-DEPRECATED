@@ -38,17 +38,22 @@ class Produto(models.Model):
 STATUS_CHOICE = (
     ('1','Aberto'),
     ('2','Entregue'),
-    ('3','Cancelado'),
+    ('3','Não entregue'),
+    ('4','Pago Parcialmente'),
+    ('5','Pago'),
 )
 
-HORARIO_CHOICE = []
-i = 0
-for hora in range(8,18):
-    HORARIO_CHOICE.append((str(i),'%s:00' % hora))
-    i += 1
-    HORARIO_CHOICE.append((str(i),'%s:30' % hora))
-    i += 1
-HORARIO_CHOICE.append((str(i),'18:00'))
+
+def get_horarios():
+    HORARIO_CHOICE = []
+    i = 0
+    for hora in range(8,18):
+        HORARIO_CHOICE.append((str(i),'%s:00' % hora))
+        i += 1
+        HORARIO_CHOICE.append((str(i),'%s:30' % hora))
+        i += 1
+    HORARIO_CHOICE.append((str(i),'18:00'))
+    return HORARIO_CHOICE
 
 class Pedido(models.Model):
     cliente = models.ForeignKey(Cliente)
@@ -56,23 +61,39 @@ class Pedido(models.Model):
     itens = models.ManyToManyField(Produto,through='PedidoProduto',editable=False)
     data_pedido = models.DateTimeField(auto_now_add=True)
     data_entrega = models.DateField()
-    hora_entrega = models.CharField(max_length=10,choices=HORARIO_CHOICE)
+    hora_entrega = models.CharField(max_length=10,choices=get_horarios())
     entrega = models.BooleanField()
+    valor_pago = models.DecimalField(max_digits=5,decimal_places=2,default=0)
+    desconto = models.DecimalField(max_digits=5,decimal_places=2,default=0, editable=False)
     observacao = models.TextField(u'Observação',blank=True,null=True)
-    status = models.CharField(max_length=10,choices=STATUS_CHOICE,default=1)
+    status = models.CharField(max_length=10,choices=STATUS_CHOICE,default=1,editable=False)
     
     def __unicode__(self):
         return u'Pedido %s' % self.id
-    
-    def pago(self):
-        return self.total() == 0.0 or self.status == '2'
-    pago.boolean = True
     
     def total(self):
         total = 0
         for item in self.pedidoproduto_set.all():
             total += item.valor()
-        return ('R$ %0.02f' % (total)).replace('.',',')
+        if self.desconto:
+            return total - self.desconto
+        return total
+
+    def a_pagar(self):
+        resultado = self.total() - self.valor_pago
+        if resultado > 0:
+            return resultado
+        return 0
+
+    def save(self, *args, **kwargs):
+        if self.status not in ['2','3'] and self.total() > 0:
+            if self.valor_pago < self.total() and self.valor_pago > 0:
+                self.status = '4'
+            elif self.valor_pago == self.total():
+                self.status = '5'
+            else:
+                self.status = '1'
+        super(Pedido,self).save(*args,**kwargs)
     
     class Meta():
         ordering = ('-data_entrega',)

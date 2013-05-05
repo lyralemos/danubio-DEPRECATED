@@ -23,12 +23,12 @@
 				  Danúbio
 				</a>
 				<ul class="nav">
-					<li id="index-nav"><a href="{% url index %}">Início</a></li>
-					<li id="clientes-nav"><a href="{% url clientes_view %}">Clientes</a></li>
-					<li id="produtos-nav"><a href="{% url produtos_view %}">Produtos</a></li>
-					<li id="pedidos-nav"><a href="{% url pedidos_view %}">Pedidos</a></li>
+					<li id="index-nav"><a href="{% url 'index' %}">Início</a></li>
+					<li id="clientes-nav"><a href="{% url 'clientes_view' %}">Clientes</a></li>
+					<li id="produtos-nav"><a href="{% url 'produtos_view' %}">Produtos</a></li>
+					<li id="pedidos-nav"><a href="{% url 'pedidos_view' %}">Pedidos</a></li>
 					<li id="relatorios-nav" class="dropdown">
-						<a href="{% url pedidos_view %}" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="{% url 'pedidos_view' %}" class="dropdown-toggle" data-toggle="dropdown">
 							Relatórios
 							<b class="caret"></b>
 							<ul class="dropdown-menu">
@@ -48,7 +48,7 @@
 					    </a>
 					    <ul class="dropdown-menu">
 					    	<li><a href="">Alterar Senha</a></li>
-					    	<li><a href="{% url logout %}">Sair</a></li>
+					    	<li><a href="{% url 'logout' %}">Sair</a></li>
 					    </ul>
 					</li>
 					

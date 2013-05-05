@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from views import IndexView, SearchListView, SearchPedidosView, CreateClienteView,\
-                    UpdateClienteView, CreatePedidoView, UpdatePedidoView, ComprovanteView
+                    UpdateClienteView, CreatePedidoView, UpdatePedidoView, ComprovanteView,\
+                    CreateProdutoView, UpdateProdutoView
 from models import Cliente, Produto, Pedido
 
 urlpatterns = patterns('',
@@ -21,10 +22,10 @@ urlpatterns = patterns('',
         name='clientes_view'),
 
     url(r'^produtos/add/$', 
-        login_required(CreateView.as_view(model=Produto,success_url='/produtos',template_name='pedidos/form.html')),
+        login_required(CreateProdutoView.as_view()),
         name='add_produtos_view'),
     url(r'^produtos/update/(?P<pk>[\w-]+)/$', 
-        login_required(UpdateView.as_view(model=Produto,success_url='/produtos',template_name='pedidos/form.html')),
+        login_required(UpdateProdutoView.as_view()),
         name='update_produtos_view'),
     url(r'^produtos/delete/(?P<pk>[\w-]+)/$', 
         login_required(DeleteView.as_view(model=Produto,success_url='/produtos',template_name='pedidos/confirm_delete.html')),

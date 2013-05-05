@@ -28,7 +28,7 @@ class PedidoAdminForm(forms.ModelForm):
 class PedidoAdmin(AjaxSelectAdmin):
     #form = make_ajax_form(Pedido,dict(cliente='cliente'))
     form = PedidoAdminForm
-    list_display = ('id','cliente','total','pago','data_entrega','status')
+    list_display = ('id','cliente','total','data_entrega','status')
     list_filter = ('data_entrega','status')
     date_hierarchy = 'data_entrega'
     search_fields = ('cliente__nome','id')

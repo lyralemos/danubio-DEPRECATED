@@ -1,13 +1,13 @@
 from django.utils import simplejson
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DetailView
 from django.db.models import Q
 
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSet
 
 from models import Cliente,Endereco,Produto,Pedido,PedidoProduto
-from forms import PedidoForm,PedidoProdutoForm
+from forms import PedidoForm, PedidoProdutoForm, ProdutoForm
 
 class IndexView(TemplateView):
 
@@ -31,7 +31,7 @@ class SearchListView(ListView):
 class SearchPedidosView(ListView):
 
 	def get_queryset(self):
-		termo = self.request.GET.get('termo',None)
+		termo = self.request.GET.get('q',None)
 		status = self.request.GET.get('status',None)
 		order = self.request.GET.get('order',None)
 
@@ -71,6 +71,18 @@ class UpdatePedidoView(UpdateWithInlinesView):
 	form_class = PedidoForm
 	inlines = [PedidoProdutoInline]
 
+class CreateProdutoView(CreateView):
+	model = Produto
+	form_class = ProdutoForm
+	success_url='/produtos'
+	template_name='pedidos/form.html'
+
+class UpdateProdutoView(UpdateView):
+	model = Produto
+	form_class = ProdutoForm
+	success_url='/produtos'
+	template_name='pedidos/form.html'
+
 class ComprovanteView(DetailView):
 
 	template_name='pedidos/comprovante.html'
@@ -104,6 +116,8 @@ def get_endereco(request,pk):
 def modificar_status(request,pk):
 	pedido = Pedido.objects.get(pk=pk)
 	acao = request.GET.get('acao')
+	if acao == '5':
+		pedido.valor_pago = pedido.total()
 	pedido.status = acao
 	pedido.save()
 	return HttpResponseRedirect(reverse('pedidos_view'))
