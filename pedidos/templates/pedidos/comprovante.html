@@ -1,35 +1,50 @@
+{% load static %}
 <!doctype html>
 <html>
 <head>
 	<title>{{ object }}</title>
-	<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="{% static 'bootstrap/docs/assets/css/bootstrap.css' %}" />
 	<style>
-		#main td{width:50%;}
-		#main td:first-child,
-		#main th:first-child{
-			text-align: right; 
-		}
+		h1,h2,h3,h4,h5{margin-bottom: 0}
+		#main{width: 700px}
+		/*#main td{width:50%;}*/
 
 		#sub{
-			width:60%;
+			width:70%;
 			margin: 0 auto;
+		}
+		#sub th{
+			text-align: center
+		}
+
+		@media all {
+			.page-break	{ display: none; }
+		}
+
+		@media print {
+			.page-break	{ display: block; page-break-before: always; }
 		}
 	</style>
 </head>
 <body>
-	<div class="container">
+	<div class="">
 		{% for r in repeat %}
-		<div class="well pull-right" style="margin-bottom:-60px"><b>Código:</b>{{ pedido.id }}</div>
-		<table id="main" class="table table-bordered table-condensed">
+		<table id="main" class="table table-condensed">
 			<tr>
 				<td colspan="2" style="text-align: center;">
-					<h4>Danúbio Doces e Salgados</h4>
-					<h5>Marinho Lemos CIA. LTDA</h5>
-					<small>
+					<div class="pull-left">
+						<h4>Danúbio Doces e Salgados</h4>
+						<p>Marinho Lemos CIA. LTDA</p>
+					</div>
+					<div class="pull-right" style="margin-top:10px">
 						Rua do Livramento, 181 - Centro - Maceió/AL<br />
 						Telefones: 3221-9925 / 3223-8089
-					</small>
+					</div>
 				</td>
+			</tr>
+			<tr>
+				<td>Número do pedido</td>
+				<td>{{ object.id }}</td>
 			</tr>
 			<tr>
 				<td>Nome</td>
@@ -52,22 +67,8 @@
 			</tr>
 			{% endif %}
 			<tr>
-				<td>Data do Pedido</td>
-				<td>{{ object.data_pedido }}</td>
-			</tr>
-			<tr>
 				<td>Entrega</td>
 				<td>{{ object.data_entrega }} - {{ object.get_hora_entrega_display }}</td>
-			</tr>
-			<tr>
-				<td>É entrega?</td>
-				<td>
-					{% if object.entrega %}
-					Sim
-					{% else %}
-					Não
-					{% endif %}
-				</td>
 			</tr>
 			{% if object.observacao %}
 			<tr>
@@ -81,23 +82,34 @@
 						<tr>
 							<th>Produto</th>
 							<th>Quantidade</th>
+							<th>Valor Unitário</th>
+							<th>Preço</th>
 						</tr>
 						{% for item in itens_pedido %}
 						<tr>
-							<td>{{ item.produto }}</td>
-							<td>{{ item.quantidade }}</td>
+							<td style="width:25%">{{ item.produto }}</td>
+							<td style="width:25%; text-align:center">{{ item.quantidade }}</td>
+							<td style="width:25%; text-align:right">R$ {{ item.produto.preco }}</td>
+							<td style="width:25%; text-align:right">R$ {{ item.valor }}</td>
 						</tr>
 						{% endfor%}
 						<tr>
-							<td>Total</td>
-							<td>{{ object.total }}</td>
+							<td><b>Total</b></td>
+							<td colspan="3" style="text-align:right"><b>R$ {{ object.total }}</b></td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 		</table>
-		
+		<br />
+		{% if total > 7 %}
+		<div class="page-break"></div>
+		{% endif %}
 		{% endfor %}
+	</div>
+	<div class="container no-print">
+		<button class="btn" onclick="window.print()">Imprimir</button>
+		<a class="btn" href="{% url 'pedidos_view' %}">Voltar</a>
 	</div>
 </body>
 </html>

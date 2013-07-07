@@ -1,6 +1,6 @@
 from django.utils import simplejson
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DetailView
 from django.db.models import Q
 
@@ -40,7 +40,7 @@ class SearchPedidosView(ListView):
 		if termo:
 			search = search.filter(Q(cliente__nome__contains=termo) | Q(pk__contains=termo))
 		if status:
-			search = search.filter(status=status)
+			pass
 		if order:
 			search = search.order_by(order) 
 		return search
@@ -65,22 +65,27 @@ class CreatePedidoView(CreateWithInlinesView):
 	model = Pedido
 	form_class = PedidoForm
 	inlines = [PedidoProdutoInline]
+	def get_success_url(self):
+		print self
+		return reverse_lazy('imprimir_pedido_view',args=[self.object.id])
 
 class UpdatePedidoView(UpdateWithInlinesView):
 	model = Pedido
 	form_class = PedidoForm
 	inlines = [PedidoProdutoInline]
+	def get_success_url(self):
+		return reverse_lazy('imprimir_pedido_view',args=[self.kwargs['pk']])
 
 class CreateProdutoView(CreateView):
 	model = Produto
 	form_class = ProdutoForm
-	success_url='/produtos'
+	success_url=reverse_lazy('produtos_view')
 	template_name='pedidos/form.html'
 
 class UpdateProdutoView(UpdateView):
 	model = Produto
 	form_class = ProdutoForm
-	success_url='/produtos'
+	success_url=reverse_lazy('produtos_view')
 	template_name='pedidos/form.html'
 
 class ComprovanteView(DetailView):
@@ -90,6 +95,7 @@ class ComprovanteView(DetailView):
 	def get_context_data(self,*args, **kwargs):
 		context = super(ComprovanteView, self).get_context_data(*args,**kwargs)
 		context['itens_pedido'] = PedidoProduto.objects.filter(pedido__pk=self.kwargs['pk'])
+		context['total'] = len(context['itens_pedido'])
 		context['repeat'] = range(2)
 		return context
 
@@ -118,7 +124,8 @@ def modificar_status(request,pk):
 	acao = request.GET.get('acao')
 	if acao == '5':
 		pedido.valor_pago = pedido.total()
-	pedido.status = acao
+	elif acao == '2':
+		pedido.entregue = True
 	pedido.save()
 	return HttpResponseRedirect(reverse('pedidos_view'))
 

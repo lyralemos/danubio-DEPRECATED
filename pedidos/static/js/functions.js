@@ -43,20 +43,10 @@ $(document).ready(function(){
 
 	$('#itens-pedido td:first-child').each(function(){
 		var td = $(this)
-		var elm = td.find('input[type="hidden"]')
+		var elm = td.find('select')
 		if (elm.val()){
 			get_valor_unitario(td,elm.val())
 		}
-		$('#'+elm.attr('id')+'_on_deck')
-			.bind('added',function(){
-				id = elm.val()
-				get_valor_unitario(td,id)
-			})
-			.bind('killed',function(){
-				td.next().find('input').val(0)
-				td.next().next().find('input').val(0)
-				get_sub_total(td.next().next())
-			})
 	})
 
 	$('.quantidade').each(function(){
@@ -85,7 +75,8 @@ $(document).ready(function(){
 	})
 
 	$('#id_data_entrega').datepicker({
-		format : 'dd/mm/yyyy'
+		format : 'dd/mm/yyyy',
+		language: 'pt-BR'
 	})
 	$('#id_observacao').addClass('input-xxlarge')
 
@@ -113,6 +104,24 @@ $(document).ready(function(){
         return result
 
     });
+
+    $('#q-field').focus(function(e){
+    	$(this).animate({width:'250px'},100)
+    }).blur(function(e){
+    	$(this).animate({width:'150px'},100)
+    })
+
+    $('select#id_cliente').chosen({
+    	no_results_text: "Nenhum resultado encontrado"
+    }).change(function(e){
+    	get_enderecos($(this).val(),null)
+    })
+
+    $('td.produto select').chosen({
+    	no_results_text: "Nenhum resultado encontrado"
+    }).change(function(){
+    	get_valor_unitario($(this).parent(),$(this).val())
+    })
 	
 })
 

@@ -23,10 +23,6 @@
 	width: 30px;
 }
 
-#itens-pedido .produto input{
-	width: 250px;
-}
-
 #itens-pedido .produto .help{display: none}
 
 #itens-pedido td{
@@ -51,3 +47,20 @@ ul.ui-autocomplete{
 	margin:100px auto;
 }
 #login form{width:220px;}
+
+#pedido-details{
+	width: 200px;
+}
+
+.chzn-single{
+	padding:3px 5px !important;
+}
+
+.chzn-single div b{
+	background-position: 0px 6px !important;
+}
+
+.chzn-search input {
+	width:210px !important;
+	height: 25px !important;
+}

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
+from djutils.decorators import memoize
+
 from django.db import models
+from django.dispatch import receiver
 
 class Cliente(models.Model):
     nome = models.CharField(max_length=200)
@@ -50,8 +55,6 @@ def get_horarios():
     for hora in range(8,18):
         HORARIO_CHOICE.append((str(i),'%s:00' % hora))
         i += 1
-        HORARIO_CHOICE.append((str(i),'%s:30' % hora))
-        i += 1
     HORARIO_CHOICE.append((str(i),'18:00'))
     return HORARIO_CHOICE
 
@@ -63,18 +66,29 @@ class Pedido(models.Model):
     data_entrega = models.DateField()
     hora_entrega = models.CharField(max_length=10,choices=get_horarios())
     entrega = models.BooleanField()
-    valor_pago = models.DecimalField(max_digits=5,decimal_places=2,default=0)
+    valor_pago = models.DecimalField(max_digits=5,decimal_places=2,default=0, null=True, blank=True)
     desconto = models.DecimalField(max_digits=5,decimal_places=2,default=0, editable=False)
     observacao = models.TextField(u'Observação',blank=True,null=True)
-    status = models.CharField(max_length=10,choices=STATUS_CHOICE,default=1,editable=False)
+    entregue = models.BooleanField(editable=False)
     
     def __unicode__(self):
         return u'Pedido %s' % self.id
     
     def total(self):
         total = 0
-        for item in self.pedidoproduto_set.all():
-            total += item.valor()
+        query = '''
+        select sum(quantidade*preco) 
+            from pedidos_pedidoproduto, pedidos_produto 
+            where pedidos_pedidoproduto.produto_id = pedidos_produto.id and 
+                pedidos_pedidoproduto.pedido_id = %s
+        '''
+
+        from django.db import connection, transaction
+        cursor = connection.cursor()
+
+        cursor.execute(query, [self.id])
+        total = cursor.fetchone()[0]
+
         if self.desconto:
             return total - self.desconto
         return total
@@ -85,15 +99,23 @@ class Pedido(models.Model):
             return resultado
         return 0
 
-    def save(self, *args, **kwargs):
-        if self.status not in ['2','3'] and self.total() > 0:
+    @memoize
+    def status(self):
+        if self.entregue:
+            return 2
+        elif datetime.today().date() > self.data_entrega:
+            return 3
+        else:
             if self.valor_pago < self.total() and self.valor_pago > 0:
-                self.status = '4'
+                return 4
             elif self.valor_pago == self.total():
-                self.status = '5'
+                return 5
             else:
-                self.status = '1'
-        super(Pedido,self).save(*args,**kwargs)
+                return 1
+
+    def get_status_display(self):
+        return dict(STATUS_CHOICE)[str(self.status())]
+
     
     class Meta():
         ordering = ('-data_entrega',)

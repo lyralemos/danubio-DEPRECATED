@@ -1,15 +1,23 @@
+{% load static %}
 <!doctype html>
 <html>
 
 <head>
 	<title>Pedidos Danúbio</title>
+	<!-- Bower Assets -->
+	<link rel="stylesheet" href="{% static 'bootstrap/docs/assets/css/bootstrap.css' %}" />
+	<link rel="stylesheet" href="{% static 'bootstrap/docs/assets/css/bootstrap-responsive.css' %}" />
+	<link rel="stylesheet" href="{% static 'bootstrap-datepicker/css/datepicker.css' %}" />
+	<link rel="stylesheet" href="{% static 'chosen/public/chosen.css' %}" />
+	<script type="text/javascript" src='{% static 'jquery/jquery.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'bootstrap/docs/assets/js/bootstrap.min.js' %}'></script>
+	<script type="text/javascript" src='{% static 'bootstrap-datepicker/js/bootstrap-datepicker.js' %}'></script>
+	<script type="text/javascript" src='{% static 'bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR.js' %}'></script>
+	<script type="text/javascript" src="{% static 'chosen/public/chosen.jquery.min.js' %}"></script>
+	{% block assets %}{%endblock%}
+	
+	<!-- local assets -->
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
-	<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" />
-	<link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/datepicker.css" />
-	<script src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
-	<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
-	<script src="{{ STATIC_URL }}bootstrap/js/bootstrap-datepicker.js"></script>
 	<script src="{{ STATIC_URL }}js/functions.js"></script>
 </head>
 

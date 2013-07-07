@@ -10,7 +10,8 @@ Tambem e possivel gerar um relatorio dos pedidos de cada dia, ou de um determina
 
 Dependencias
 ------------
-django 1.4.x
+django 1.5.1
 django-extra-views
 django-pagination
 django-ajax-selects
+django-bower

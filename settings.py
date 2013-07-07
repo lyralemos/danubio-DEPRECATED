@@ -81,6 +81,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -112,6 +113,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'danubio.urls'
@@ -128,8 +130,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'pedidos',
-    'ajax_select',
     'pagination',
+    'djangobower',
+    'djutils',
+    'debug_toolbar'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -155,17 +159,19 @@ LOGGING = {
     }
 }
 
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_DIR,'')
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'chosen',
+    'bootstrap',
+    'bootstrap-datepicker',
+)
+
+INTERNAL_IPS = ('127.0.0.1',)
+
 FORMAT_MODULE_PATH = 'danubio.formats'
 DECIMAL_SEPARATOR = ','
-
-
-AJAX_LOOKUP_CHANNELS = {
-    #'cliente' : dict(model='pedidos.Cliente',search_field='nome'),
-    'cliente' : ('pedidos.lookups', 'ClienteLookup'),
-    'produto' : dict(model='pedidos.Produto',search_field='nome'),
-}
-AJAX_SELECT_BOOTSTRAP = True
-AJAX_SELECT_INLINES = 'inline'
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
