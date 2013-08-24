@@ -4,5 +4,4 @@
 *.db
 .DS_Store
 *.pyc
-media/admin_tools
-components
+danubio/bower_components
